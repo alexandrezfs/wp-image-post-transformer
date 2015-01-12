@@ -10,10 +10,31 @@ Author URI: http://alexandrenguyen.fr
 License: MIT
 */
 
-add_action( 'wp_enqueue_scripts', 'register_scripts', 99999 );
+add_action( 'wp_enqueue_scripts', 'register_scripts', 9999 );
+add_action('wp_head', 'print_head');
 
 function register_scripts() {
-	    wp_register_script( 'load-images-script', plugins_url( '/js/script.js', __FILE__ ) );
+	wp_register_script( 'load-images-script', plugins_url( '/js/script.js', __FILE__ ) );
+	wp_enqueue_script('load-images-script');
+}
+
+function print_head() {
+	?>
+		<script>
+
+			if(!get_site_url) {
+				function get_site_url() {
+					return "<?php echo get_site_url(); ?>";
+				}
+			}		
+			if(!is_single) {
+				function is_single() {
+					return <?php echo is_single() == 1 ? "true" : "false"; ?>;
+				}
+			}
+
+		</script>
+	<?php
 }
 
 ?>
